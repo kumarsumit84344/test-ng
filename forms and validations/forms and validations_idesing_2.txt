@@ -1,0 +1,172 @@
+employee.ts
+
+export interface Employee {
+    emp_id: number;
+    emp_name: string;
+    age: number;
+    designation: string;
+    mobile: number;
+    email: string;
+    doj: Date;
+}
+
+
+==================
+
+employee-new.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+import { FormControl, FormGroup,  Validators } from "@angular/forms";
+import { Employee } from 'src/assets/models/employee';
+import { EMPLOYEE } from 'src/assets/models/employee-mock';
+
+@Component({
+  selector: 'app-employee-new',
+  templateUrl: './employee-new.component.html',
+  styleUrls: ['./employee-new.component.css']
+})
+export class EmployeeNewComponent implements OnInit {
+
+ 
+//Fill your code here
+
+emp_arr:Employee[]=EMPLOYEE;
+  emp_form:any;
+
+  constructor() { 
+    this.createForm();
+  }
+  desigList:String[]=["","Manager","Production Manager","Associate Engineer","CFO","Engineering Manager","Engineer"];
+
+ createForm(){
+  this.emp_form=new FormGroup({
+    emp_name:new FormControl('',[Validators.required,Validators.minLength(4),Validators.pattern('^[a-zA-Z ]*$')]),
+    emp_desig:new FormControl('',[Validators.required]),
+    emp_mobile:new FormControl('',[Validators.required,Validators.pattern('^[0-9]{10}$')]),
+    emp_email:new FormControl('',[Validators.required,Validators.email]),
+    emp_age:new FormControl('',[Validators.required,Validators.pattern('^[0-9]*$'),Validators.max(60),Validators.min(20)]),
+    emp_doj:new FormControl('',[Validators.required])
+  });
+}
+
+   
+
+  ngOnInit(): void {
+    
+    
+    
+  }
+  add_emp(){
+    console.log(this.emp_form.value);
+    this.emp_arr.push(this.emp_form.value);
+    alert("Employee data added successfully!");
+  }
+
+  onSubmit(){
+    this.add_emp();
+  }
+
+  get emp_name(){
+    return this.emp_form.get('emp_name');
+  }
+  get emp_desig(){
+    return this.emp_form.get('emp_desig');
+  }
+  get emp_mobile(){
+    return this.emp_form.get('emp_mobile');
+  }
+  get emp_email(){
+    return this.emp_form.get('emp_email');
+  }
+  get emp_age(){
+    return this.emp_form.get('emp_age');
+  }
+  get emp_doj(){
+    return this.emp_form.get('emp_doj');
+  }
+
+}
+
+======================
+employee-new.component.html
+
+<form [formGroup]="emp_form" (ngSubmit)="onSubmit()">
+  
+  <div class="login-form sign-up">
+    <div class="form-card">
+      <h2 class="h-form-style">New Employee</h2>
+      <div class="form-group">
+        <label for="emp-name">Name</label>
+        <input type="text" class="form-control" id="emp-name" formControlName="emp_name" placeholder="Name">
+        <div *ngIf="emp_name && emp_name.invalid && emp_name.touched" class="invalid-feedback" id="name-error">
+          <!-- <div *ngIf="emp_name.errors?.['required']">Name is required!</div> -->
+          <div *ngIf="emp_form.get('emp_name').hasError('required')">Name is required!</div>
+          <div *ngIf="emp_name.errors?.minlength">Name must be at least 4 chars long!</div>
+          <div *ngIf="emp_form.get('emp_name').hasError('pattern')">Name cannot have numbers or special characters!</div>
+        </div>
+      </div>
+     <div>
+        <label for="emp-desig">Designation</label>
+        <select class="form-control" id="emp-desig" formControlName="emp_desig">
+      
+          <option value="">Select Designation</option>
+          <option *ngFor="let desig of desigList" [value]="desig">{{desig}}</option>
+        </select>
+        <div *ngIf="emp_desig && emp_desig.invalid && emp_desig.touched" class="invalid-feedback" id="des-error">
+          <div *ngIf="emp_form.get('emp_desig').hasError('required')">Designation is required!</div>
+        </div>
+     </div>
+     
+      <div>
+        <label for="emp-mobile">Mobile Number</label>
+        <input type="text" class="form-control" id="emp-mobile" formControlName="emp_mobile" placeholder="Mobile Number">
+    
+        <div *ngIf="emp_mobile && emp_mobile.invalid" class="invalid-feedback" id="phone-error">
+            <div *ngIf="emp_form.get('emp_mobile').hasError('required')">Mobile Number is required!</div>
+            <div *ngIf="emp_form.get('emp_mobile').hasError('pattern')">Mobile Number is invalid!</div>
+        </div>
+      </div>
+        
+            <label for="emp-email">Email</label>
+            <input type="text" class="form-control" id="emp-email" formControlName="emp_email" placeholder="Email">
+                
+            <div *ngIf="emp_email && emp_email.invalid && emp_email.touched" class="invalid-feedback" id="email-error">
+                <div *ngIf="emp_form.get('emp_email').hasError('required')">Email ID is required!</div>
+                <div *ngIf="emp_form.get('emp_email').hasError('email')">Email ID is invalid!</div>
+            </div>
+        
+        <div class="form-group">
+            <label for="emp-age">Age</label>
+            <input type="text" class="form-control" id="emp-age" formControlName="emp_age" placeholder="Age">
+                
+            <div *ngIf="emp_age && emp_age.invalid && emp_age.touched" class="invalid-feedback" id="age-error">
+                <div *ngIf="emp_form.get('emp_age').hasError('required')">Age is required!</div>
+                <div *ngIf="emp_form.get('emp_age').hasError('pattern')">Invalid age input!</div>
+                <div *ngIf="emp_form.get('emp_age').hasError('min')">Incorrect age input! Accepted only integers of range 20-60!</div>
+                <div *ngIf="emp_form.get('emp_age').hasError('max')">Incorrect age input! Accepted only integers of range 20-60!</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="emp-doj">Date of joining</label>
+            <input type="text" class="form-control" id="emp-doj" formControlName="emp_doj" placeholder="Date of joining">
+               
+            <div *ngIf="emp_doj && emp_doj.invalid && emp_doj.touched" class="invalid-feedback" id="doj-error">
+                <div *ngIf="emp_form.get('emp_doj').hasError('required')">DOJ is required!</div>
+                <div *ngIf="emp_form.get('emp_doj').hasError('pattern')">Invalid date!</div>
+            </div>
+        </div>
+        <button type="submit" id="addEmployee" class="btn btn-primary btn-block" [disabled]="!emp_form.valid" id="addEmployee">ADD EMPLOYEE</button>
+    </div>
+    </div>
+    
+    
+</form>
+
+==============================
+
+app.component.html
+
+
+<app-employee-new></app-employee-new>

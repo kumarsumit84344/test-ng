@@ -1,0 +1,92 @@
+user.ts
+
+export interface User {
+  id: number;
+  name: string;
+}
+
+===========================
+user.service.ts
+
+import { Injectable } from '@angular/core';
+
+import { Observable, of } from 'rxjs';
+
+import { User } from './user';
+import { USERS} from './user-list';
+
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+
+  constructor() { }
+   getHeroes(): Observable<User[]> {
+    const users = of(USERS);
+    
+    return users;
+  }
+  
+}
+
+
+====================
+user.component.ts
+
+import { Component, OnInit } from '@angular/core';
+
+import { User } from '../user';
+import { UserService } from '../user.service';
+
+
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
+})
+export class UserComponent implements OnInit {
+ 
+  
+  //Fill your code here
+  heading:string='Enrolled Users';
+  selectedHero?: User;
+
+  heroes: User[] = [];
+
+  constructor(private heroService: UserService) { }
+
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+
+  onSelect(hero: User): void {
+    this.selectedHero = hero;
+    
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes);
+  }
+}
+  
+==========================
+user.component.html
+
+
+<h2 id='title'>{{heading}}</h2>
+<ul class="users">
+  <li *ngFor="let hero of heroes" id="user-{{hero.id}}">
+    <button type="button" (click)="onSelect(hero)" [class.selected]="hero === selectedHero">
+      <span class="badge">{{hero.id}}</span>
+      <span class="name">&nbsp;{{hero.name}}</span>
+    </button>
+  </li>
+</ul>
+
+==================
+app.component.html
+
+<app-user></app-user>

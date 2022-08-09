@@ -1,0 +1,112 @@
+Q1=================================
+app.component.ts
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //Fill your code here
+   heading: string = 'Product Card';
+products=[
+  { id: 0, name: 'Samsung Galaxy Note 10',category:'Mobiles',price:69900,availQuantity:5,imageUrl:'../assets/img/product1.jpg' },
+  { id: 1, name: 'SkullCandy BT Inkd Plus',category:'Bluetooth Headset',price:1999,availQuantity:20,imageUrl:'../assets/img/product2.jpg' },
+  { id: 2, name: 'JBL Flip 3 Bluetooth speaker',category:'Speakers',price:5999,availQuantity:7,imageUrl:'../assets/img/product4.jpg' },
+  { id: 3, name: 'Conekt Volt Power Bank',category:'Power Bank',price:1350,availQuantity:4,imageUrl:'../assets/img/product5.jpg' },
+  { id: 4, name: 'Anker Soundbuds Rise',category:'Bluetooth Headset',price:2999,availQuantity:0,imageUrl:'../assets/img/product3.jpg' },
+  { id: 5, name: 'Apple Watch Series',category:'Watch',price:52940,availQuantity:2 ,imageUrl:'../assets/img/product6.jpg'},
+  { id: 6, name: 'IBall Slide Spirit X2',category:'Tablets',price:4999,availQuantity:0,imageUrl:'../assets/img/product7.jpg' },
+  { id: 7, name: 'Skullcandy Set 2.0 ',category:'Headset',price:2999,availQuantity:25 ,imageUrl:'../assets/img/product8.jpg'},
+  ]
+}
+++++++++++++++++++++=
+app.component.html
+
+<!--Fill your code here-->
+<h2 id="title">{{heading}}</h2>
+  <div class="card" *ngFor="let product of products">
+    <img id="prod-img{{product.id}}" src="{{product.imageUrl}}" alt="{{product.name}}">
+    <h2 class="name">{{product.name}}</h2>
+    <p class="category">Category: {{product.category}}</p>
+    <p class="price">Price: ${{product.price}}</p>
+    <p class="stock">Stock: {{product.availQuantity}}</p>
+    <button class="in-stock" *ngIf="product.availQuantity > 0">Add to Cart</button>
+    <button class="out-stock" *ngIf="product.availQuantity == 0">Out Of Stock</button>
+  </div>
+
+
+Q2=========================
+app.component.html
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    
+    <div class="header">
+        <img src="assets/images/header.jpg" size="width:1000px;"/>
+        <div class="top-centered">
+          <h1 style="font-family: 'Dancing Script', cursive;">Gadget Wall</h1>
+        </div>
+    </div>
+    <div id="form" class="form-page top-centered-form" >
+    
+	<! Fill your code here -->
+    <h3>Update Address</h3>
+        <div id="pincode-message" >
+        <p *ngIf="message==false">Sorry! Delivery is not possible.</p>
+        <p *ngIf="message==true">Delivery is possible.</p>
+
+        </div> 
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" placeholder="Enter Pincode" #pincode>
+        <button (click)="validatePincode(pincode.value)" id="check-pincode">Check for Delivery</button>
+
+    </div>
+
++++++++++++++++++++++++++++++++++
+app.component.ts
+
+import { Component } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  pincode?:string;
+  message?:boolean;
+  
+
+
+  validatePincode(code:string){
+    let validPincodes:string[] = ['641028','641218','652333','641027','641021'];
+    let isValid:boolean = false;
+    for(let i=0;i<validPincodes.length;i++){
+      if(code == validPincodes[i]){
+        isValid = true;
+        
+        break;
+      }
+    }
+    if(isValid){
+      this.message = true;
+    }
+    else{
+      this.message = false;
+    }
+
+
+  }
+
+
+}

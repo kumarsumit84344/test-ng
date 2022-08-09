@@ -1,0 +1,136 @@
+app.component.html
+
+
+<h1>Filter Products</h1>
+  <form [formGroup]="productForm" (ngSubmit)="applyFilter()">
+    <mat-form-field>
+      <input matInput placeholder="Starting Price" formControlName="startingPrice" id="startPrice">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Ending Price" formControlName="endingPrice" id="endPrice">
+    </mat-form-field>
+    <input type="button" id="search" value="Search" (click)="applyFilter()">
+    <!-- <button mat-raised-button type="button" color="primary" (click)="applyFilter()" id="search">Search</button> -->
+  </form>
+  <h1>Product Details</h1>
+  <div *ngFor="let product of products">
+    <mat-card>
+      
+        
+        <p class="productName">{{product.name}}</p>
+        <p class="category"> Category : {{product.category}}</p>
+      
+      <img mat-card-image class="product-img "src="{{product.productImage}}" alt="jpeg">
+      
+        <p class="price">Price : {{product.price}}</p>
+         
+    
+    
+    </mat-card>
+  </div>
+
+  <div *ngIf="products.length == 0">
+    <p id="message">No Products available</p>
+  </div>
+
+
+===================================
+
+app.component.ts
+
+
+import { Component } from '@angular/core';
+
+import { FormControl, FormGroup } from '@angular/forms';
+import { ProductService } from './product.service';
+import { from, Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { Product } from './product';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  constructor(private productService: ProductService) { }
+  products: Product[]=[];
+  ngOnInit() {
+  	//Call service to get product list
+    this.getProductss();
+
+
+  }
+  //Create FormGroup
+  productForm = new FormGroup({
+    startingPrice: new FormControl(''),
+    endingPrice: new FormControl('')
+  });
+
+  applyFilter() {
+    //Call service to filter product list
+    this.productService.getProducts(this.productForm.value.startingPrice, this.productForm.value.endingPrice).subscribe(products => this.products = products);
+
+
+	
+}
+
+getProductss():void{
+  this.productService.getProductss().subscribe(products => this.products = products);
+}
+
+
+
+}
+
+===============================
+
+product.ts
+
+
+export interface Product {
+    id: number;
+    name: string;
+    category: string;
+    price: number;
+    productImage: string;
+}
+
+
+===========================
+
+product.service.ts
+
+
+import { Injectable } from '@angular/core';
+
+import { Observable, of, from } from 'rxjs';
+import { products } from './product-data';
+import { Product } from './product';
+import { filter, tap } from 'rxjs/operators';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  pro: Product[] = [];
+  constructor() { }
+  getProducts(sPrice?: number, ePrice?: number): Observable<Product[]> {
+    if (sPrice && ePrice) {
+      return of(products.filter(p => p.price >= sPrice && p.price <= ePrice));
+    }
+    return of(products);
+        
+  }
+
+  getProductss(): Observable<Product[]> {
+    return of(products);
+  }
+
+
+
+
+}
+
+
+===========================

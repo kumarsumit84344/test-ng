@@ -1,0 +1,125 @@
+app.component.html
+
+
+<div *ngIf="submitted" id="success-msg">
+  <div class="alert alert-success" role="alert">
+    Question Posted Successfully
+  </div>
+
+</div>
+
+ <form [formGroup]="userForm" (submit)="savePost()">
+  <div class="container">
+     <h2 style="display: inline-block;margin-right: 10px">Post Question</h2>
+     <mat-icon style="float:right">post_add</mat-icon><br><br>
+
+ <ng-container class="form-group">
+     <label for="title=">Title</label>
+     <input required formControlName="title" id="title">
+     <control-messages id="err-1" [control]="userForm.get('title')"></control-messages>
+ </ng-container>
+ <ng-container class="form-group">
+     <label for="description=">Description</label>
+     <textarea required formControlName="description" id="description" ></textarea>
+     <control-messages id="err-2" [control]="userForm.get('description')"></control-messages>
+ </ng-container>
+ <button style="display:inline-block" type="submit" [disabled]="!userForm.valid" >Post</button>
+ </div>
+ 
+  
+</form>
+
+============================
+
+app.component.ts
+
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidationService } from './validation.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //fill your code here
+  userForm: any;
+  message: string;
+  submitted=false;
+  constructor(private formbuilder:FormBuilder) {
+    this.userForm = this.formbuilder.group({
+      title:['',Validators.required],
+      description:['',[Validators.required,
+      Validators.minLength(10),Validators.maxLength(100)]]
+
+    
+  });
+}
+
+savePost() {
+    this.submitted = true;
+    console.log(this.userForm.value);
+  if(this.userForm.dirty && this.userForm.valid) {
+    this.message = 'Question Posted Successfully';
+  }
+}
+
+}
+
+=================================
+
+
+validation.service.ts
+
+
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ValidationService {
+  //fill your code here]
+  static getValidatorErrorMessage(validatorName: string, validatorValue?: any) {
+    let config = {
+      'required': 'Required',
+      
+      'minlength': `Minimum length ${validatorValue.requiredLength}`,
+      'maxlength': `Maximum length ${validatorValue.requiredLength}`,
+    };
+
+    return config[validatorName];
+  }
+}
+
+
+
+============================
+
+control-messages.component.ts
+
+
+
+import { Component, Input } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
+import { ValidationService } from '../validation.service';
+
+@Component({
+  selector: 'control-messages',
+  template: `<div *ngIf="errorMessage !== null">{{errorMessage}}</div>`
+})
+export class ControlMessagesComponent {
+  @Input() control: FormControl;
+  constructor() { }
+
+  get errorMessage() {
+    for (const propertyName in this.control.errors) {
+      if (this.control.errors.hasOwnProperty(propertyName) && this.control.touched) {
+        return ValidationService.getValidatorErrorMessage(propertyName, this.control.errors[propertyName]);
+      }
+    }
+    return null;
+  }
+
+  
+}

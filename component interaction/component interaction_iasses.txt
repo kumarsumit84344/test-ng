@@ -1,0 +1,173 @@
+app.component.html
+
+<app-product-list></app-product-list>
+
+
+===================
+
+app.component.ts
+
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //Fill your code here
+  products = [
+    { id: 0, name: 'Samsung Galaxy Note 10',category:'Mobiles',price:69900,availQuantity:5,imageUrl:'assets/images/product1.jpg' },
+    { id: 1, name: 'SkullCandy BT Inkd Plus',category:'Bluetooth Headset',price:1999,availQuantity:20,imageUrl:'assets/images/product2.jpg' },
+    { id: 2, name: 'JBL Flip 3 Bluetooth speaker',category:'Speakers',price:5999,availQuantity:7,imageUrl:'assets/images/product4.jpg' },
+    { id: 3, name: 'Conekt Volt Power Bank',category:'Power Bank',price:1350,availQuantity:4,imageUrl:'assets/images/product5.jpg' },
+    { id: 4, name: 'Anker Soundbuds Rise',category:'Bluetooth Headset',price:2999,availQuantity:6,imageUrl:'assets/images/product3.jpg' },
+    { id: 5, name: 'Apple Watch Series',category:'Watch',price:52940,availQuantity:2 ,imageUrl:'assets/images/product6.jpg'},
+  ];
+
+  selectedProduct:any;
+  showDetails(product){
+    this.selectedProduct=product;
+  }
+
+  hideDetails(){
+    this.selectedProduct=null;
+  }
+
+
+  
+}
+
+============================
+
+product.ts
+
+export interface Product {
+    id: number;
+    name: string;
+    category: string;
+    availQuantity: number;
+    price: number;
+    imageUrl: string;
+    }
+
+=================
+[note: create (product-mock.ts) file in app]
+
+product-mock.ts
+
+
+import { Product } from "./product";
+
+
+
+export const PRODUCTS: Product[] = [
+    { id: 0, name: 'Samsung Galaxy Note 10',category:'Mobiles',price:69900,availQuantity:5,imageUrl:'assets/images/product1.jpg' },
+    { id: 1, name: 'SkullCandy BT Inkd Plus',category:'Bluetooth Headset',price:1999,availQuantity:20,imageUrl:'assets/images/product2.jpg' },
+    { id: 2, name: 'JBL Flip 3 Bluetooth speaker',category:'Speakers',price:5999,availQuantity:7,imageUrl:'assets/images/product4.jpg' },
+    { id: 3, name: 'Conekt Volt Power Bank',category:'Power Bank',price:1350,availQuantity:4,imageUrl:'assets/images/product5.jpg' },
+    { id: 4, name: 'Anker Soundbuds Rise',category:'Bluetooth Headset',price:2999,availQuantity:6,imageUrl:'assets/images/product3.jpg' },
+    { id: 5, name: 'Apple Watch Series',category:'Watch',price:52940,availQuantity:2 ,imageUrl:'assets/images/product6.jpg'},
+];
+
+
+=============================
+
+product.component.ts
+
+import { Component, OnInit ,Input} from '@angular/core';
+import {Product} from '../product';
+@Component({
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css']
+})
+export class ProductComponent implements OnInit {
+
+
+  @Input() hero?: Product;
+  constructor() { }
+
+  ngOnInit() {
+  }
+  
+}
+
+===============================
+
+
+product.component.html
+
+ <div *ngIf="hero" >
+     <img src="{{hero.imageUrl}}" alt="" id="prod-img" style="height: 70px;width: 50px;">
+        <h2 class="name">{{hero.name}}</h2> 
+        <p class="category">Category: {{hero.category}}</p>
+        <p class="price">Price: ${{hero.price}}</p>
+        <p class="stock">Stock: {{hero.availQuantity}}</p>
+        <button>Add to Cart</button>
+    </div>
+
+
+
+===============================
+
+product-list.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import {Product} from '../product';
+import { PRODUCTS } from '../product-mock';
+
+@Component({
+  selector: 'app-product-list',
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
+})
+export class ProductListComponent implements OnInit {
+  heroes = PRODUCTS;
+
+  selectedHero?: Product;
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  onSelect(hero: Product): void {
+    this.selectedHero = hero;
+  }
+  
+}
+
+
+==================================
+
+product-list.component.html
+
+<h2 class="title">Product World</h2>
+
+ <ul class="products">
+  <li *ngFor="let product of heroes"  id="product{{product.id}}" (click)=" onSelect(product)">
+   <img src="{{product.imageUrl}}" alt="{{product.name}}" id="image{{product.id}}" style="height: 70px;width: 50px;">
+   <p>{{product.name}}</p>
+  </li>
+  <app-product [hero]="selectedHero"></app-product>
+ </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

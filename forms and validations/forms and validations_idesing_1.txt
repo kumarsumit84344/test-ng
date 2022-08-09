@@ -1,0 +1,73 @@
+app.component.html
+
+import { Component } from '@angular/core';
+import { FormGroup, FormControl} from '@angular/forms';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+   //fill your code here
+    display={
+    name: '',
+    price: '',
+    brand: '',
+    img: ''
+
+   }
+
+  profileForm = new FormGroup({
+    name: new FormControl(''),
+    price: new FormControl(''),
+    brand: new FormControl(''),
+    img: new FormControl('')
+  });
+
+  onSubmit() {
+    this.display.name = this.profileForm.value.name;
+    this.display.price = this.profileForm.value.price;
+    this.display.brand = this.profileForm.value.brand;
+    this.display.img = this.profileForm.value.img;
+  }
+ 
+}
+
+
+==============================
+
+app.component.ts
+
+
+import { Component } from '@angular/core';
+import { FormGroup, FormControl} from '@angular/forms';
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+   //fill your code here
+    display={
+    name: '',
+    price: '',
+    brand: '',
+    img: ''
+
+   }
+
+  profileForm = new FormGroup({
+    name: new FormControl(''),
+    price: new FormControl(''),
+    brand: new FormControl(''),
+    img: new FormControl('')
+  });
+
+  onSubmit() {
+    this.display.name = this.profileForm.value.name;
+    this.display.price = this.profileForm.value.price;
+    this.display.brand = this.profileForm.value.brand;
+    this.display.img = this.profileForm.value.img;
+  }
+ 
+}

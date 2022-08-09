@@ -1,0 +1,60 @@
+
+app.component.ts
+
+
+
+import { Component } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  
+edge?:string;
+  size?:string;
+
+  applyStyle(edge:string,size:string){
+    this.edge=edge;
+    this.size=size;
+  }
+}
+
+
+
+=====================
+app.component.html
+
+<!--Fill your code here-->
+ <h2 id="heading">Profile Pic Styling</h2>
+  <select id="edge" #edgee>
+    <option value="sharp">Sharp Edge</option>
+    <option value="rounded">Rounded Edge</option>
+  </select>
+  <select id="size" #sizee>
+    <option value="small">Small</option>
+    <option value="medium">Medium</option>
+    <option value="large">Large</option>
+  </select>
+  <button id="apply-style" (click)="applyStyle(edgee.value,sizee.value)">Apply Style</button>
+  <div id="image" >
+    <img id="pro-pic" [ngClass]="{
+      'pro-pic-sharp': edge === 'sharp',
+  
+      'pro-pic-bordered': edge === 'rounded',
+      'small': size === 'small',
+      'medium': size === 'medium',
+      'large': size === 'large'
+  
+    }"   src="assets/images/ProPic.jpg" alt="jpg">
+  </div>
+
+
+
+
+
+

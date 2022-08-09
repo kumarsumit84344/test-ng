@@ -1,0 +1,114 @@
+library.service.ts     [path: assests/services]
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Book } from 'src/app/book-interface';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LibraryService {
+
+  constructor(private http: HttpClient) { }
+  private heroesUrl = 'assets/data/books.json';  // URL to web api
+
+  /** GET heroes from the server */
+getHeroes(): Observable<Book[]> {
+  return this.http.get<Book[]>(this.heroesUrl)
+}
+
+}
+==================================
+
+book-interface.ts
+
+
+export interface Book {
+    id: number;
+    title: string;
+    author: string;
+    description: string;
+}
+
+================================
+
+app.component.html
+
+<app-book-list-http></app-book-list-http>
+
+=============================
+
+book-list-http.component.ts
+
+import { Component, OnInit } from '@angular/core';
+import { LibraryService } from 'src/assets/services/library.service';
+import { Book } from '../book-interface';
+
+@Component({
+  selector: 'app-book-list-http',
+  templateUrl: './book-list-http.component.html',
+  styleUrls: ['./book-list-http.component.css']
+})
+export class BookListHttpComponent implements OnInit {
+
+  heroes: Book[] = [];
+
+  constructor(private heroService: LibraryService) { }
+
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+    .subscribe(heroes => this.heroes = heroes);
+  }
+
+
+}
+
+
+=====================================
+
+book-list-http.component.html
+
+
+<section class="heading-bar">
+    <div class="container">
+        <h1 class="text-center">ABL Online Library-Book List</h1>
+
+        <div class="main-wrapper">
+            <div class="products-wrappper">
+                <div class="row-group">
+                    <div class="col-col2">
+                        <div class="book-items">
+
+                            <div class="row-group">
+                                <div class="col">
+                                    <div id="book-card" class="book-card" *ngFor="let hero of heroes">
+                                        <figure id="book-image" class="image">
+                                            <img src="assets/images/read-book.png" alt="">
+                                        </figure>
+                                        <div id="book-title-{{hero.id}}" class="book-name">{{hero.title}}</div>
+                                        <div id="book-author-{{hero.id}}" class="small-text">Author: {{hero.author}}</div>
+                                        <div id="book-desc-{{hero.id}}" class="small-text">{{hero.description}}</div>
+                                        <div class="btn-section">
+                                            <button id="btn-wish-{{hero.id}}" class="btn btn-secondary">WISHLIST</button>
+                                            <button id="btn-rent-{{hero.id}}" class="btn btn-primary">RENT</button>
+                                        </div>
+
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>

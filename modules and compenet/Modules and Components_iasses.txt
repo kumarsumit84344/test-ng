@@ -1,0 +1,33 @@
+
+
+app.ts
+
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  //Fill your code here
+  title: string = 'Robotics';
+  author: string = 'Zack Whittake';
+  category: string = 'Robotics';
+  postedDate: string = '01/10/2019';
+  likes: number = 27;
+}
+
++++++++++
+app.html
+
+<!--Fill your code here-->
+<h2>Angular component creation for post page</h2>
+  <h1 id="title">{{title}}</h1>
+  <h3 id="author">{{author}}</h3>
+  <h3 id="postedDate">{{postedDate}}</h3>
+  <h3 id="category">{{category}}</h3>
+  <h3 id="likes">{{likes}}</h3>
+  <img id="img" src="assets/images/index.jpg" alt="img">
+
+==============================================================================

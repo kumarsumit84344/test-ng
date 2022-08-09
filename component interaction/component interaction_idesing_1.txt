@@ -1,0 +1,148 @@
+[note: create (hero.ts) file in app]
+
+hero.ts
+
+   export interface Hero {
+    id: number;
+    name: string;
+    imageUrl: string;
+    description: string;
+
+  }
+
+===============================
+[note: create (mock-heroes.ts) fiel in app
+
+mock-heroes.ts
+
+import { Hero } from './hero';
+
+export const HEROES: Hero[] = [
+    {id:1, name:'CLASSIC watch', imageUrl:'assets/images/watch.jpg', description:"Classic Watches - Buy Classic Watches at India Best Online Shopping Store. Check Price in India and Shop Online. Free Shipping  Cash on Delivery ..."},
+    {id:2, name:'MacBook', imageUrl:'assets/images/macbook.jpg', description:"Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra) MQD32HN/A A1466 (13.3 inch, Silver, 1.35 kg) Starts from 60 dollars Cash on Delivery ..."},
+    {id:3, name:'GOLD iPhone Xs', imageUrl:'assets/images/iphonex.jpg',description:"The iPhone Xs is in tune with beloved versions of previous Apple mobile phones in the sense that it is built in privacy and security from the very beginning. Cash on delivery..."},
+    {id:4, name:'BLACK iPhone X', imageUrl:'assets/images/iphonexr.jpg', description:"The iPhone XR has arrived to stun our senses with a host of features such as the Liquid Retina Display, a faster Face ID, and the powerful A12 Bionic Chip."},
+    {id:5, name:'Apple Close up', imageUrl:'assets/images/macbook.jpg', description:"Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra) MQD32HN/A A1466 (13.3 inch, Silver, 1.35 kg) Starts from 60 dollars Cash on Delivery ..."},
+    {id:6, name:'Sony Xperia', imageUrl:'assets/images/sony.jpg', description:"When the perfect moment occurs, you need the right piece of equipment by your side to capture it. And, you can't always carry a bulky DSLR camera around"},
+    {id:7, name:'OPPO R17', imageUrl:'assets/images/oppo.jpg', description:"13MP+2MP dual rear camera with AI beauty, HDR, background blur, sticker, filter | 16MP front facing camera 15.8 centimeters (6.2-inch) HD + in-cell capacitive touchscreen"},
+    {id:8, name:'OnePlus 6T', imageUrl:'assets/images/oneplus.jpg', description:"Featuring our largest display ever and a resilient glass back, the OnePlus 6T was crafted with care and purpose. Experience a 6.41 inch Optic AMOLED display."}
+    
+];    
+
+
+==================================
+
+app.component.html
+
+<app-product></app-product>
+
+
+
+==============================
+
+product-detail.component.html
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="https://fonts.googleapis.com/css?family=Dancing+Script&display=swap" rel="stylesheet">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    
+   <!--Fill your code here-->
+   <div *ngIf="hero"  >
+
+    <p id="description{{hero.id}}">{{hero.description}}</p>
+  
+  </div>
+
+
+=====================================
+
+
+product-detail.component.ts
+
+
+import { Component, OnInit, Input} from '@angular/core';
+
+import { Hero } from '../hero';
+
+
+@Component({
+  selector: 'app-product-detail',
+  templateUrl: './product-detail.component.html',
+  styleUrls: ['./product-detail.component.css']
+})
+export class ProductDetailComponent implements OnInit {
+
+  //Fill your code here
+  @Input() hero?: Hero;
+
+  productDetails = [
+    {id:1,description:"Classic Watches - Buy Classic Watches at India Best Online Shopping Store. Check Price in India and Shop Online. Free Shipping  Cash on Delivery ..."},
+    {id:2,description:"Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra) MQD32HN/A A1466 (13.3 inch, Silver, 1.35 kg) Starts from 60 dollars Cash on Delivery ..."},
+    {id:3,description:"The iPhone Xs is in tune with beloved versions of previous Apple mobile phones in the sense that it is built in privacy and security from the very beginning. Cash on delivery..."},
+    {id:4,description:"The iPhone XR has arrived to stun our senses with a host of features such as the Liquid Retina Display, a faster Face ID, and the powerful A12 Bionic Chip."},
+    {id:5,description:"Apple MacBook Air Core i5 5th Gen - (8 GB/128 GB SSD/Mac OS Sierra) MQD32HN/A A1466 (13.3 inch, Silver, 1.35 kg) Starts from 60 dollars Cash on Delivery ..."},
+    {id:6,description:"When the perfect moment occurs, you need the right piece of equipment by your side to capture it. And, you can't always carry a bulky DSLR camera around"},
+    {id:7,description:"13MP+2MP dual rear camera with AI beauty, HDR, background blur, sticker, filter | 16MP front facing camera 15.8 centimeters (6.2-inch) HD + in-cell capacitive touchscreen"},
+    {id:8,description:"Featuring our largest display ever and a resilient glass back, the OnePlus 6T was crafted with care and purpose. Experience a 6.41 inch Optic AMOLED display."}
+  ];
+  
+  constructor() { }
+
+  ngOnInit() {
+  }
+  
+  showDescription(id) {
+	//Fill your code here
+  }
+
+}
+
+================================
+
+product.component.html
+
+<!--Fill your code here-->
+<h1 id="heading">{{title}}</h1>
+<div *ngFor="let hero of heroes" >
+  
+        <h2 id="product-name{{hero.id}}" class="hero-name">{{hero.name}}</h2>
+        <img class="hero-image" src="{{hero.imageUrl}}" alt="{{hero.name}}" id="image{{hero.id}}" (click)="onSelect(hero)">
+        <app-product-detail [hero]="selectedHero"></app-product-detail>
+
+      
+   
+</div>
+
+
+=============================
+
+product.component.ts
+
+
+import { Component, OnInit } from '@angular/core';
+
+import { Hero } from '../hero';
+import { HEROES } from '../mock-heroes';
+
+@Component({
+  selector: 'app-product',
+  templateUrl: './product.component.html',
+  styleUrls: ['./product.component.css']
+})
+export class ProductComponent implements OnInit {
+  constructor() { }
+  //Fill your code here
+  title:string='Gadget Wall';
+  heroes = HEROES;
+  selectedHero?: Hero;
+
+  ngOnInit() {
+  }
+
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
+  }
+}

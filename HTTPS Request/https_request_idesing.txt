@@ -1,0 +1,114 @@
+app.component.html
+
+<header><h2> {{title}}</h2></header>
+ 
+<mat-sidenav-container class="sideContainer" >
+    <mat-sidenav class="sideNav" mode="side" opened>
+       
+            <mat-nav-list>Home</mat-nav-list>
+            <mat-nav-list>Mobile Phones</mat-nav-list>
+            <mat-nav-list>Accessories</mat-nav-list>
+            <mat-nav-list>Speakers</mat-nav-list>
+            <mat-nav-list>Watches</mat-nav-list>
+            <mat-nav-list>Login</mat-nav-list>
+            
+ 
+    </mat-sidenav>
+    <mat-sidenav-content>
+       
+            <!-- Fill your code here -->
+            <div *ngFor="let hero of heroes">
+                 <mat-card class="card">
+                  <img class="prod-img" src="{{hero.productImage}}" alt="{{hero.name}}">
+                         <h2 class="productName">{{hero.name}}</h2>
+                                <p class="category">Category : {{hero.category}}</p>
+                                <p class="price">Price : {{hero.price}}</p>
+                                <p class="quantity">AvailQuantity : {{hero.availQuantity}}</p>
+                                <button class="buyProd" mat-raised-button color="primary">Buy</button>
+
+
+
+                    
+
+               </mat-card>
+        </div>
+        
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+  
+  <footer>Powered by Shopcules.com</footer>
+
+=======================
+
+app.component.ts
+
+import { Component } from '@angular/core';
+import { Product } from './product';
+import { ProductService } from './product.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  
+  title="Welcome to Online shopping website"
+  heroes: Product[] = [];
+
+  constructor(private heroService: ProductService) { }
+  
+
+  //Fill your code here
+
+  ngOnInit(): void {
+    this.getHeroes();
+  }
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+    .subscribe(heroes => this.heroes = heroes);
+  }
+
+
+}
+
+
+=======================================
+
+product.ts
+
+export interface Product {
+    id: number;
+    name: string;
+    category: string;
+    price: number;
+    productImage: string;
+    availQuantity: number;
+}
+
+
+======================
+
+product.service.ts
+
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Product } from './product';
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+  
+  //Fill your code here
+   constructor(
+    private http: HttpClient) { }
+
+    private heroesUrl = 'assets/product-mock-data.json';
+
+    /** GET heroes from the server */
+    getHeroes(): Observable<Product[]> {
+      return this.http.get<Product[]>(this.heroesUrl)
+    }
+}
